@@ -32,12 +32,13 @@ payload splitBy "\n"
         <vm:outbound-endpoint exchange-pattern="one-way" path="process" doc:name="VM"/>
     <!-- vm endpoint responsible for pushing result back to test -->
   </flow>
-    <flow name="processBids">
+    <flow name="processBids" processingStrategy="synchronous">
         <vm:inbound-endpoint exchange-pattern="one-way" path="process" doc:name="VM"/>
+        <logger message="Start At time: #[function:now] , processing Bidder: #[payload]" level="INFO" doc:name="Logger"/>
         <component class="com.mulesoft.EnricherAuctionComponent" doc:name="EnrichBids Java Component"/>
       <!--   <component class="com.mulesoft.HighestBidderAuctionComponent" doc:name="Highest Bidder Java Component"/> -->
-        <logger message="Highest Bidder: #[payload]" level="INFO" doc:name="Log Payload"/>
-        <logger message="At time: #[function:now]" level="INFO" doc:name="Log TimeStamp"/>
+        <logger message="Highest Bidder: #[payload]  , End At time: #[function:now]" level="INFO" doc:name="Log Payload"/>
+        <logger  level="INFO" doc:name="Log TimeStamp"/>
         <vm:outbound-endpoint exchange-pattern="one-way" path="auction.service" doc:name="VM: auction.service"/>
     </flow>
 
