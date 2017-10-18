@@ -1,1 +1,1 @@
-"# mule-learning-bid-processing" 
+# mule-learning-bid-processing

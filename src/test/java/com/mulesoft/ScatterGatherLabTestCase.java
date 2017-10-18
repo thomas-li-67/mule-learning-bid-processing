@@ -36,7 +36,7 @@ public class ScatterGatherLabTestCase extends FunctionalTestCase {
       return "src/main/app/mule-config.xml";
     }
 
-    @Test
+    @Test 
     public void testAuctionService() throws Exception {
       MuleClient client = muleContext.getClient();
       MuleMessage result = client.request("vm://auction.service", RECEIVE_TIMEOUT * 3);
