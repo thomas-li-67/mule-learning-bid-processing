@@ -16,6 +16,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <queued-asynchronous-processing-strategy name="highThroughtProcessing" maxThreads="80" minThreads="16" threadTTL="10000" doc:name="Queued Asynchronous Processing Strategy"/>
 
   <flow name="AuctionService" >
         <http:listener config-ref="HTTP_Listener_Configuration" path="/auction" doc:name="HTTP"/>
@@ -42,7 +43,7 @@ payload splitBy "\n"
         <collection-splitter doc:name="Collection Splitter"/>
         <vm:outbound-endpoint exchange-pattern="one-way" path="process" doc:name="process"/>
     </flow>
-    <flow name="processBids">
+    <flow name="processBids" processingStrategy="highThroughtProcessing">
         <vm:inbound-endpoint exchange-pattern="one-way" path="process" doc:name="VM-process"/>
         <logger message="Start At time: #[function:now] , processing Bidder: #[payload]" level="INFO" doc:name="Logger"/>
         <component class="com.mulesoft.EnricherAuctionComponent" doc:name="EnrichBids Java Component"/>
